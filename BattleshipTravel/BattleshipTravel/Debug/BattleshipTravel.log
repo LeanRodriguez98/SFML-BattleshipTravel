@@ -7,5 +7,11 @@
           1 archivo(s) copiado(s).
           1 archivo(s) copiado(s).
           1 archivo(s) copiado(s).
+  Bullet.cpp
+  Enemy.cpp
+  Game.cpp
+  Main.cpp
+  Generating Code...
+  Bullet.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
   BattleshipTravel.vcxproj -> C:\Users\Leandro\Desktop\SFML-BattleshipTravel\BattleshipTravel\Debug\BattleshipTravel.exe
   BattleshipTravel.vcxproj -> C:\Users\Leandro\Desktop\SFML-BattleshipTravel\BattleshipTravel\Debug\BattleshipTravel.pdb (Partial PDB)

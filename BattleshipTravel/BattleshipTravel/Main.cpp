@@ -1,15 +1,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <time.h>
+#include "Game.h"
 using namespace std;
 using namespace sf;
 int main() {
-	bool gameOver = false;
-	RenderWindow window(VideoMode(800, 600), "BattleshipTraveler");
-	while (!gameOver)
-	{
-		window.display();
-	}
-
+	Game * game;
+	game = new Game(Vector2i(800, 600), "BattleshipTravel");
 	return 0;
 }
