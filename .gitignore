@@ -1,0 +1,7 @@
+BattleshipTravel/x64/Debug/
+
+*.ipch
+
+x64/Debug/
+
+/Debug/
