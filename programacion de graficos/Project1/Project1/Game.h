@@ -36,7 +36,7 @@ public:
 	void FinalScreenDraw();
 	void DeleteEntitis();
 private:
-	enum Screen{ MainMenuScreen, GameScreen, FinalScreen };
+	enum Screen{ MainMenuScreen, GameScreen, FinalScreen,PauseScreen };
 	Screen actualScreen;
 	Player * player;
 	RenderWindow * gameWindow;

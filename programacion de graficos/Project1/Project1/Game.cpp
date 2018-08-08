@@ -79,6 +79,9 @@ void Game::GameLoop()
 			FinalScreenDraw();
 			MenusInput();
 			break;
+		case PauseScreen:
+			MenusInput();
+
 		}
 		
 	}
@@ -124,6 +127,19 @@ void Game::MenusInput()
 					points = 0;
 					DeleteEntitis();
 				}
+				
+			}
+			if (Keyboard::isKeyPressed(Keyboard::P))
+			{
+				if (actualScreen == PauseScreen)
+				{
+					actualScreen = GameScreen;
+				}
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Escape)) 
+			{
+				gameWindow->close();
 			}
 			break;
 		}
@@ -433,6 +449,14 @@ void Game::Input()
 						}
 					}
 				}
+				if (Keyboard::isKeyPressed(Keyboard::Escape))
+				{
+					gameWindow->close();
+				}
+				if (Keyboard::isKeyPressed(Keyboard::P))
+				{
+					actualScreen = PauseScreen;				
+				}
 			}
 			break;			
 		}
@@ -489,6 +513,10 @@ Game::~Game()
 	delete enemyTime;
 	delete font;
 	delete textPoints;
+	delete titleText;
+	delete pressSpaceToStartText;
+	delete gameOverText;
+	delete pressSpaceToRestartText;
 	DeleteEntitis();
 	//La computadora da un error que dice: "no se encontro delete_array.cpp"
 
