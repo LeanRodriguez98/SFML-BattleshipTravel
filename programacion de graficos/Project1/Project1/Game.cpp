@@ -166,3 +166,21 @@ void Game::Input()
 		}
 	}
 } 
+
+Game::~Game() 
+{
+	delete player;
+	delete gameWindow;
+	delete events;
+	delete[] bulletArray;
+	delete[] asteroidArray;
+	delete[] enemyArray;
+	delete[] enemyBulletArray;
+	delete ScreenResolution;
+	delete backgroundTexture;
+	delete backgroundSprite;
+	delete asteroidClock;
+	delete asteroidTime;
+	delete enemyClock;
+	delete enemyTime;
+}

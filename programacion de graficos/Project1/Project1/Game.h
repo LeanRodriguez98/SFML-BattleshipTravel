@@ -23,6 +23,7 @@ class Game
 {
 public:
 	Game(Vector2i resolution, String title);
+	~Game();
 	void GameLoop();
 	void Draw();
 	void Input();

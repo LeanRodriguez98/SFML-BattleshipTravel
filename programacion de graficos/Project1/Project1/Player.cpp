@@ -32,3 +32,10 @@ Sprite Player::GetSprite()
 {
 	return *playerSprite;
 }
+
+Player::~Player() 
+{
+	delete playerTexture;
+	delete playerSprite;
+	delete position;
+}

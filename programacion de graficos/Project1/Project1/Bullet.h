@@ -5,6 +5,7 @@ class Bullet
 {
 public:
 	Bullet(bool,float,float);	
+	~Bullet();
 	void Movement();
 	Sprite GetSprite();
 private:

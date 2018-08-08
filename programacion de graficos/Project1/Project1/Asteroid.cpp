@@ -25,3 +25,10 @@ Sprite Asteroid::GetSprite()
 {
 	return *asteroidSprite;
 }
+
+Asteroid::~Asteroid() 
+{
+	delete asteroidTexture;
+	delete asteroidSprite;
+	delete position;
+}

@@ -6,6 +6,7 @@ class Enemy
 {
 public:
 	Enemy(float, float);
+	~Enemy();
 	void Movement();
 	Vector2f GetPosition();
 	Sprite GetSprite();

@@ -6,6 +6,7 @@ class Player
 {
 public:
 	Player();
+	~Player();
 	void SetPosition(float,float);
 	Vector2f GetPosition();	
 	Sprite GetSprite();

@@ -31,5 +31,11 @@ void Bullet::Movement()
 Sprite Bullet::GetSprite()
 {
 	return *bulletSprite;
+}
 
+Bullet::~Bullet() 
+{
+	delete bulletTexture;
+	delete bulletSprite;
+	delete position;
 }

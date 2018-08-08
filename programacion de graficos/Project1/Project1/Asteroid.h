@@ -5,6 +5,7 @@ class Asteroid
 {
 public:
 	Asteroid(float, float);
+	~Asteroid();
 	void Movement();
 	Sprite GetSprite();
 private:

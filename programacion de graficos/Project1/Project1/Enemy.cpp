@@ -45,3 +45,12 @@ float Enemy::GetFrameRate()
 {
 	return shootTime->asSeconds();
 }
+
+Enemy::~Enemy() 
+{
+	delete enemyTexture;
+	delete enemySprite;
+	delete position;
+	delete shootClock;
+	delete shootTime;
+}
