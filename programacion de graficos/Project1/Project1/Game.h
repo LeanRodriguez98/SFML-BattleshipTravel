@@ -1,8 +1,14 @@
 #pragma once
 #include "SFML\Graphics.hpp"
 #include "Player.h"
+#include "Bullet.h"
+#include <list>
+#include <vector>
+#include <iterator>
 using namespace sf;
 using namespace std;
+#define BULLETARRAYSIZE 100
+#define BULLETSIZEY 10
 class Game
 {
 public:
@@ -16,5 +22,5 @@ private:
 	Event * events;
 	int maxFps;
 	bool gameLoop;
-	
+	Bullet *bulletArray[BULLETARRAYSIZE];
 };

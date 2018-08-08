@@ -7,8 +7,7 @@ class Player
 public:
 	Player();
 	void SetPosition(float,float);
-	Vector2f GetPosition();
-	void Shoot();
+	Vector2f GetPosition();	
 	Sprite GetSprite();
 
 private:

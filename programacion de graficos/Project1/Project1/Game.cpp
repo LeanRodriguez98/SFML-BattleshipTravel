@@ -7,7 +7,9 @@ Game::Game(Vector2i resolution, String title)
 	gameLoop = true;
 	gameWindow->setFramerateLimit(maxFps);
 	player = new Player();
-	events = new Event;
+	events = new Event();
+	
+	
 
 	GameLoop();
 }
@@ -25,6 +27,13 @@ void Game::Draw()
 {
 	gameWindow->clear(Color::Black);
 	gameWindow->draw(player->GetSprite());
+	for (int i = 0; i < BULLETARRAYSIZE; i++)
+	{
+		if (bulletArray[i] != NULL) {
+			gameWindow->draw(bulletArray[i]->GetSprite());
+			bulletArray[i]->Movement();
+		}
+	}
 	gameWindow->display();
 }
 
@@ -36,26 +45,39 @@ void Game::Input()
 		{
 		case Event::Closed:
 			gameWindow->close();
-			exit(1);
+			exit(1);///////////////////////////////////////////////////////////////
 			break;
 		case Event::KeyPressed:
 			if (Keyboard::isKeyPressed(Keyboard::W)) 
 			{
 				player->SetPosition(0, -1);
 			}
-			 if (Keyboard::isKeyPressed(Keyboard::A))
+			if (Keyboard::isKeyPressed(Keyboard::A))
 			{
 				player->SetPosition(-1, 0);
 			}
-			 if (Keyboard::isKeyPressed(Keyboard::S))
+			if (Keyboard::isKeyPressed(Keyboard::S))
 			{
 				player->SetPosition(0, 1);
 			}
-			 if (Keyboard::isKeyPressed(Keyboard::D))
+			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				player->SetPosition(1, 0);
 			}
+			if (Keyboard::isKeyPressed(Keyboard::Space)) 
+			{
+				for (int i = 0; i < BULLETARRAYSIZE; i++)
+				{
+					if (bulletArray[i] == NULL) {
+						bulletArray[i] = new Bullet(true, player->GetPosition().x + player->GetSprite().getGlobalBounds().width, player->GetPosition().y + player->GetSprite().getGlobalBounds().height/2 - BULLETSIZEY/2);
+						break;
+					}
+
+				}
+			
+			}
 			break;
+			
 		}
 	}
 } 
