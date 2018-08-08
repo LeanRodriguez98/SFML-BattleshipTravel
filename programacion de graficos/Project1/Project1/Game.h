@@ -7,8 +7,10 @@
 #include <iterator>
 using namespace sf;
 using namespace std;
+#define FPSLIMIT 60
 #define BULLETARRAYSIZE 100
 #define BULLETSIZEY 10
+
 class Game
 {
 public:
@@ -23,4 +25,6 @@ private:
 	int maxFps;
 	bool gameLoop;
 	Bullet *bulletArray[BULLETARRAYSIZE];
+	Texture * backgroundTexture;
+	Sprite * backgroundSprite;
 };

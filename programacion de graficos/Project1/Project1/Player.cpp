@@ -13,7 +13,6 @@ Player::Player()
 	playerSprite->setTexture(*playerTexture);
 	playerSprite->setPosition(position->x,position->y);
 	speed = 10;
-	cout << playerSprite->getGlobalBounds().width << endl;
 }
 
 void Player::SetPosition(float x,float y)

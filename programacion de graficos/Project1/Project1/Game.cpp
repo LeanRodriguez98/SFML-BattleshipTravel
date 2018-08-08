@@ -3,13 +3,15 @@
 Game::Game(Vector2i resolution, String title)
 {
 	gameWindow = new RenderWindow(VideoMode(resolution.x, resolution.y), title);
-	maxFps = 60;
+	maxFps = FPSLIMIT;
 	gameLoop = true;
 	gameWindow->setFramerateLimit(maxFps);
 	player = new Player();
 	events = new Event();
-	
-	
+	backgroundTexture = new Texture();
+	backgroundSprite = new Sprite();
+	backgroundTexture->loadFromFile("Background.png");
+	backgroundSprite->setTexture(*backgroundTexture);
 
 	GameLoop();
 }
@@ -26,6 +28,8 @@ void Game::GameLoop()
 void Game::Draw()
 {
 	gameWindow->clear(Color::Black);
+	gameWindow->draw(*backgroundSprite);
+
 	gameWindow->draw(player->GetSprite());
 	for (int i = 0; i < BULLETARRAYSIZE; i++)
 	{
@@ -72,12 +76,9 @@ void Game::Input()
 						bulletArray[i] = new Bullet(true, player->GetPosition().x + player->GetSprite().getGlobalBounds().width, player->GetPosition().y + player->GetSprite().getGlobalBounds().height/2 - BULLETSIZEY/2);
 						break;
 					}
-
-				}
-			
+				}			
 			}
-			break;
-			
+			break;			
 		}
 	}
 } 
