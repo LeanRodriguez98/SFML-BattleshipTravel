@@ -15,11 +15,18 @@ Game::Game(Vector2i resolution, String title)
 	asteroidTime = new Time();
 	enemyClock = new Clock();
 	enemyTime = new Time();
+	font = new Font();
+	textPoints = new Text();
 	backgroundTexture = new Texture();
 	backgroundSprite = new Sprite();
 	backgroundTexture->loadFromFile("Background.png");
 	backgroundSprite->setTexture(*backgroundTexture);
-
+	font->loadFromFile("SpaceFont.ttf");
+	textPoints->setFont(*font);
+	textPoints->setPosition(50, 500);
+	textPoints->setCharacterSize(32);
+	textPoints->setString("points: " + to_string(points));
+	points = 0;
 	GameLoop();
 }
 
@@ -31,7 +38,7 @@ void Game::GameLoop()
 		SpawnEnemys();
 		EnemyShoot();
 		SpawnAsteroids();
-		Colisions();
+		//Colisions();
 		Draw();
 	}
 }
@@ -51,6 +58,7 @@ void Game::Colisions()
 						delete bulletArray[j];
 						enemyArray[i] = NULL;
 						bulletArray[j] = NULL;
+						points += 100;
 						break;
 					}
 				}
@@ -98,6 +106,18 @@ void Game::Colisions()
 
 	for (int i = 0; i < ASTEROIDARRAYSIZE; i++)
 	{
+		if (asteroidArray[i] != NULL)
+		{
+			if (asteroidArray[i]->GetPosition().x < 0)
+			{
+				delete asteroidArray[i];
+				asteroidArray[i] = NULL;
+			}
+		}
+	}
+
+	for (int i = 0; i < ASTEROIDARRAYSIZE; i++)
+	{
 		if (asteroidArray[i] != NULL) {
 
 			for (int j = 0; j < BULLETARRAYSIZE; j++)
@@ -109,6 +129,7 @@ void Game::Colisions()
 						delete bulletArray[j];
 						asteroidArray[i] = NULL;
 						bulletArray[j] = NULL;
+						points += 250;
 						break;
 					}
 				}
@@ -130,6 +151,7 @@ void Game::Colisions()
 						delete bulletArray[j];
 						enemyBulletArray[i] = NULL;
 						bulletArray[j] = NULL;
+						points += 150;
 						break;
 					}
 				}
@@ -273,7 +295,12 @@ void Game::Draw()
 			enemyBulletArray[i]->Movement();
 		}
 	}
-	
+	if (textPoints != NULL)
+	{
+		textPoints->setString("points: " + to_string(points));
+
+		gameWindow->draw(*textPoints);
+	}
 
 	gameWindow->display();
 }
@@ -290,19 +317,19 @@ void Game::Input()
 		case Event::KeyPressed:
 			if (player != NULL)
 			{
-				if (Keyboard::isKeyPressed(Keyboard::W))
+				if (Keyboard::isKeyPressed(Keyboard::W) && player->GetPosition().y - player->GetSprite().getGlobalBounds().height > 0)
 				{
 					player->SetPosition(0, -1);
 				}
-				if (Keyboard::isKeyPressed(Keyboard::A))
+				if (Keyboard::isKeyPressed(Keyboard::A) && player->GetPosition().x - (player->GetSprite().getGlobalBounds().width/4) > 0)
 				{
 					player->SetPosition(-1, 0);
 				}
-				if (Keyboard::isKeyPressed(Keyboard::S))
+				if (Keyboard::isKeyPressed(Keyboard::S) && player->GetPosition().y + (player->GetSprite().getGlobalBounds().height * 1.5) < ScreenResolution->y)
 				{
 					player->SetPosition(0, 1);
 				}
-				if (Keyboard::isKeyPressed(Keyboard::D))
+				if (Keyboard::isKeyPressed(Keyboard::D) && player->GetPosition().x + (player->GetSprite().getGlobalBounds().width * 1.2) < ScreenResolution->x)
 				{
 					player->SetPosition(1, 0);
 				}
@@ -322,12 +349,12 @@ void Game::Input()
 	}
 } 
 
-Game::~Game() 
+Game::~Game()
 {
 	delete player;
 	delete gameWindow;
 	delete events;
-	
+
 	delete ScreenResolution;
 	delete backgroundTexture;
 	delete backgroundSprite;
@@ -335,7 +362,28 @@ Game::~Game()
 	delete asteroidTime;
 	delete enemyClock;
 	delete enemyTime;
-
+	delete font;
+	delete textPoints;
+	for (int i = 0; i < BULLETARRAYSIZE; i++)
+	{
+		if (bulletArray[i] != NULL)
+			delete bulletArray[i];
+	}
+	for (int i = 0; i < ENEMYARRAYSIZE; i++)
+	{
+		if (enemyArray[i] != NULL)
+			delete enemyArray[i];
+	}
+	for (int i = 0; i < ENEMYBULLETARRAYSIZE; i++)
+	{
+		if (enemyBulletArray[i] != NULL)
+			delete enemyBulletArray[i];
+	}
+	for (int i = 0; i < ASTEROIDARRAYSIZE; i++)
+	{
+		if (asteroidArray[i] != NULL)
+			delete asteroidArray[i];
+	}
 	//La computadora da un error que dice: "no se encontro delete_array.cpp"
 
 	/*delete[] bulletArray;

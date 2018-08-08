@@ -17,9 +17,13 @@ Asteroid::Asteroid(float x_position, float y_position)
 void Asteroid::Movement()
 {	
 	asteroidSprite->move(-speed, 0);
+	*position = (Vector2f)asteroidSprite->getPosition();
 }
 
-
+Vector2f Asteroid::GetPosition() 
+{
+	return *position;
+}
 
 Sprite Asteroid::GetSprite()
 {

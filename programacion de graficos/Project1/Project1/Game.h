@@ -46,6 +46,9 @@ private:
 	Time * asteroidTime;
 	Clock * enemyClock;
 	Time * enemyTime;
+	Font * font;
+	Text * textPoints;
 	int maxFps;
+	int points;
 	bool gameLoop;
 };
