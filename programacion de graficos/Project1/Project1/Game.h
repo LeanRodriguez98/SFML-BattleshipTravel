@@ -30,6 +30,7 @@ public:
 	void SpawnAsteroids();
 	void SpawnEnemys();
 	void EnemyShoot();
+	void Colisions();
 private:
 	Player * player;
 	RenderWindow * gameWindow;

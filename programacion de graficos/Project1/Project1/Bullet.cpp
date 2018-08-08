@@ -24,9 +24,14 @@ void Bullet::Movement()
 	{
 		bulletSprite->move(-speed, 0);
 	}
+	*position = (Vector2f)bulletSprite->getPosition();
+
 }
 
-
+Vector2f Bullet::GetPosition()
+{
+	return *position;
+}
 
 Sprite Bullet::GetSprite()
 {

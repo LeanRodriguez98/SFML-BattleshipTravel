@@ -7,6 +7,7 @@ public:
 	Bullet(bool,float,float);	
 	~Bullet();
 	void Movement();
+	Vector2f GetPosition();
 	Sprite GetSprite();
 private:
 	Texture * bulletTexture;

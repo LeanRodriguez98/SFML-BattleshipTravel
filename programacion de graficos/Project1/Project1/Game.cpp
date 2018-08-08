@@ -31,7 +31,154 @@ void Game::GameLoop()
 		SpawnEnemys();
 		EnemyShoot();
 		SpawnAsteroids();
+		Colisions();
 		Draw();
+	}
+}
+
+void Game::Colisions() 
+{
+	for (int i = 0; i < ENEMYARRAYSIZE; i++)
+	{
+		if (enemyArray[i] != NULL) {
+			
+			for (int j = 0; j < BULLETARRAYSIZE; j++)
+			{
+				if (bulletArray[j] != NULL) {
+					if (enemyArray[i]->GetSprite().getGlobalBounds().intersects(bulletArray[j]->GetSprite().getGlobalBounds()))
+					{
+						delete enemyArray[i];
+						delete bulletArray[j];
+						enemyArray[i] = NULL;
+						bulletArray[j] = NULL;
+						break;
+					}
+				}
+			}
+			
+		}
+	}
+
+	for (int i = 0; i < BULLETARRAYSIZE; i++) 
+	{
+		if (bulletArray[i] != NULL) 
+		{
+			if (bulletArray[i]->GetPosition().x > ScreenResolution->x)
+			{
+				delete bulletArray[i];
+				bulletArray[i] = NULL;
+			}
+		}
+	}
+
+	for (int i = 0; i < ENEMYBULLETARRAYSIZE; i++)
+	{
+		if (enemyBulletArray[i] != NULL)
+		{
+			if (enemyBulletArray[i]->GetPosition().x < 0)
+			{
+				delete enemyBulletArray[i];
+				enemyBulletArray[i] = NULL;
+			}
+		}
+	}
+
+
+	for (int i = 0; i < ENEMYARRAYSIZE; i++)
+	{
+		if (enemyArray[i] != NULL)
+		{
+			if (enemyArray[i]->GetPosition().x < 0)
+			{
+				delete enemyArray[i];
+				enemyArray[i] = NULL;
+			}
+		}
+	}
+
+	for (int i = 0; i < ASTEROIDARRAYSIZE; i++)
+	{
+		if (asteroidArray[i] != NULL) {
+
+			for (int j = 0; j < BULLETARRAYSIZE; j++)
+			{
+				if (bulletArray[j] != NULL) {
+					if (asteroidArray[i]->GetSprite().getGlobalBounds().intersects(bulletArray[j]->GetSprite().getGlobalBounds()))
+					{
+						delete asteroidArray[i];
+						delete bulletArray[j];
+						asteroidArray[i] = NULL;
+						bulletArray[j] = NULL;
+						break;
+					}
+				}
+			}
+
+		}
+	}
+
+	for (int i = 0; i < ENEMYBULLETARRAYSIZE; i++)
+	{
+		if (enemyBulletArray[i] != NULL) {
+
+			for (int j = 0; j < BULLETARRAYSIZE; j++)
+			{
+				if (bulletArray[j] != NULL) {
+					if (enemyBulletArray[i]->GetSprite().getGlobalBounds().intersects(bulletArray[j]->GetSprite().getGlobalBounds()))
+					{
+						delete enemyBulletArray[i];
+						delete bulletArray[j];
+						enemyBulletArray[i] = NULL;
+						bulletArray[j] = NULL;
+						break;
+					}
+				}
+			}
+
+		}
+	}
+
+
+	for (int i = 0; i < ENEMYBULLETARRAYSIZE; i++)
+	{
+		if (enemyBulletArray[i] != NULL && player != NULL) {
+			if (enemyBulletArray[i]->GetSprite().getGlobalBounds().intersects(player->GetSprite().getGlobalBounds()))
+			{
+				delete enemyBulletArray[i];
+				delete player;
+				player = NULL;
+				enemyBulletArray[i] = NULL;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < ENEMYARRAYSIZE; i++)
+	{
+		if (enemyArray[i] != NULL && player != NULL) {
+			if (enemyArray[i]->GetSprite().getGlobalBounds().intersects(player->GetSprite().getGlobalBounds()))
+			{
+				delete enemyArray[i];
+				delete player;
+				player = NULL;
+				enemyArray[i] = NULL;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < ASTEROIDARRAYSIZE; i++)
+	{
+		if (asteroidArray[i] != NULL && player != NULL) {
+			if (asteroidArray[i]->GetSprite().getGlobalBounds().intersects(player->GetSprite().getGlobalBounds()))
+			{
+				delete asteroidArray[i];
+				delete player;
+				player = NULL;
+				asteroidArray[i] = NULL;
+				break;
+			}
+		}
 	}
 }
 
@@ -92,7 +239,10 @@ void Game::Draw()
 {
 	gameWindow->clear(Color::Black);
 	gameWindow->draw(*backgroundSprite);
-	gameWindow->draw(player->GetSprite());
+	if (player != NULL)
+	{
+		gameWindow->draw(player->GetSprite());
+	}
 	for (int i = 0; i < BULLETARRAYSIZE; i++)
 	{
 		if (bulletArray[i] != NULL) {
@@ -115,6 +265,7 @@ void Game::Draw()
 			enemyArray[i]->UpdateFrameRate();
 		}
 	}
+	
 	for (int i = 0; i < ENEMYBULLETARRAYSIZE; i++)
 	{
 		if (enemyBulletArray[i] != NULL) {
@@ -122,6 +273,8 @@ void Game::Draw()
 			enemyBulletArray[i]->Movement();
 		}
 	}
+	
+
 	gameWindow->display();
 }
 
@@ -133,34 +286,36 @@ void Game::Input()
 		{
 		case Event::Closed:
 			gameWindow->close();
-			exit(1);///////////////////////////////////////////////////////////////
 			break;
 		case Event::KeyPressed:
-			if (Keyboard::isKeyPressed(Keyboard::W)) 
+			if (player != NULL)
 			{
-				player->SetPosition(0, -1);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::A))
-			{
-				player->SetPosition(-1, 0);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::S))
-			{
-				player->SetPosition(0, 1);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::D))
-			{
-				player->SetPosition(1, 0);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::Space)) 
-			{
-				for (int i = 0; i < BULLETARRAYSIZE; i++)
+				if (Keyboard::isKeyPressed(Keyboard::W))
 				{
-					if (bulletArray[i] == NULL) {
-						bulletArray[i] = new Bullet(true, player->GetPosition().x + player->GetSprite().getGlobalBounds().width, player->GetPosition().y + player->GetSprite().getGlobalBounds().height/2 - BULLETSIZEY/2);
-						break;
+					player->SetPosition(0, -1);
+				}
+				if (Keyboard::isKeyPressed(Keyboard::A))
+				{
+					player->SetPosition(-1, 0);
+				}
+				if (Keyboard::isKeyPressed(Keyboard::S))
+				{
+					player->SetPosition(0, 1);
+				}
+				if (Keyboard::isKeyPressed(Keyboard::D))
+				{
+					player->SetPosition(1, 0);
+				}
+				if (Keyboard::isKeyPressed(Keyboard::Space))
+				{
+					for (int i = 0; i < BULLETARRAYSIZE; i++)
+					{
+						if (bulletArray[i] == NULL) {
+							bulletArray[i] = new Bullet(true, player->GetPosition().x + player->GetSprite().getGlobalBounds().width, player->GetPosition().y + player->GetSprite().getGlobalBounds().height / 2 - BULLETSIZEY / 2);
+							break;
+						}
 					}
-				}			
+				}
 			}
 			break;			
 		}
@@ -172,10 +327,7 @@ Game::~Game()
 	delete player;
 	delete gameWindow;
 	delete events;
-	delete[] bulletArray;
-	delete[] asteroidArray;
-	delete[] enemyArray;
-	delete[] enemyBulletArray;
+	
 	delete ScreenResolution;
 	delete backgroundTexture;
 	delete backgroundSprite;
@@ -183,4 +335,12 @@ Game::~Game()
 	delete asteroidTime;
 	delete enemyClock;
 	delete enemyTime;
+
+	//La computadora da un error que dice: "no se encontro delete_array.cpp"
+
+	/*delete[] bulletArray;
+	delete[] enemyArray;
+	delete[] enemyBulletArray;
+	delete[] asteroidArray;*/
+
 }
