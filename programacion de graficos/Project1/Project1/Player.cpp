@@ -12,6 +12,7 @@ Player::Player()
 	playerTexture->loadFromFile("Ship.png");
 	playerSprite->setTexture(*playerTexture);
 	playerSprite->setPosition(position->x,position->y);
+	playerSprite->setScale(1.5, 1.5);
 	speed = 10;
 }
 

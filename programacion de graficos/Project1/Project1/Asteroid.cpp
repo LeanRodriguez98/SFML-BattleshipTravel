@@ -10,7 +10,7 @@ Asteroid::Asteroid(float x_position, float y_position)
 	asteroidTexture->loadFromFile("Asteroid.png");
 	asteroidSprite->setTexture(*asteroidTexture);
 	asteroidSprite->setPosition(x_position, y_position);
-	speed = 30;
+	speed = 20;
 
 }
 

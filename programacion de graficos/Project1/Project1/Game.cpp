@@ -3,15 +3,18 @@
 Game::Game(Vector2i resolution, String title)
 {
 	srand(time(NULL));
-
+	ScreenResolution = new Vector2i();
+	*ScreenResolution = resolution;
 	gameWindow = new RenderWindow(VideoMode(resolution.x, resolution.y), title);
 	maxFps = FPSLIMIT;
 	gameLoop = true;
 	gameWindow->setFramerateLimit(maxFps);
 	player = new Player();
 	events = new Event();
-	gameClock = new Clock();
-	gameTime = new Time();
+	asteroidClock = new Clock();
+	asteroidTime = new Time();
+	enemyClock = new Clock();
+	enemyTime = new Time();
 	backgroundTexture = new Texture();
 	backgroundSprite = new Sprite();
 	backgroundTexture->loadFromFile("Background.png");
@@ -25,21 +28,59 @@ void Game::GameLoop()
 	while (gameWindow->isOpen())
 	{
 		Input();
+		SpawnEnemys();
+		EnemyShoot();
 		SpawnAsteroids();
 		Draw();
 	}
 }
 
+void Game::EnemyShoot() 
+{
+	for (int i = 0; i < ENEMYARRAYSIZE; i++)
+	{
+		if (enemyArray[i] != NULL) {
+
+			if (enemyArray[i]->GetFrameRate() > ENEMYFRAMERATE)
+			{
+				for (int j = 0; j < ENEMYBULLETARRAYSIZE; j++)
+				{
+					if (enemyBulletArray[j] == NULL) {
+						enemyBulletArray[j] = new Bullet(false, enemyArray[i]->GetPosition().x, enemyArray[i]->GetPosition().y + enemyArray[i]->GetSprite().getGlobalBounds().height / 2 - BULLETSIZEY / 2);
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void Game::SpawnEnemys() 
+{
+	*enemyTime = enemyClock->getElapsedTime();
+	if (enemyTime->asSeconds() > (float)ENEMYSPAWNTIME)
+	{
+		*enemyTime = enemyClock->restart();
+		for (int i = 0; i < ENEMYARRAYSIZE; i++)
+		{
+			if (enemyArray[i] == NULL) {
+				enemyArray[i] = new Enemy(ScreenResolution->x, rand() % ScreenResolution->y - ENEMYSIZEY);
+				break;
+			}
+		}
+	}
+}
+
 void Game::SpawnAsteroids()
 {
-	*gameTime = gameClock->getElapsedTime();
-	if (gameTime->asSeconds() > (float)ASTEROIDSPAWNTIME) 
+	*asteroidTime = asteroidClock->getElapsedTime();
+	if (asteroidTime->asSeconds() > (float)ASTEROIDSPAWNTIME)
 	{
-		*gameTime = gameClock->restart();
+		*asteroidTime = asteroidClock->restart();
 		for (int i = 0; i < ASTEROIDARRAYSIZE; i++)
 		{
 			if (asteroidArray[i] == NULL) {
-				asteroidArray[i] = new Asteroid(800,rand()%600-ASTEROIDSIZEY);
+				asteroidArray[i] = new Asteroid(ScreenResolution->x,rand()%ScreenResolution->y-ASTEROIDSIZEY);
 				break;
 			}
 		}
@@ -64,6 +105,21 @@ void Game::Draw()
 		if (asteroidArray[i] != NULL) {
 			gameWindow->draw(asteroidArray[i]->GetSprite());
 			asteroidArray[i]->Movement();
+		}
+	}
+	for (int i = 0; i < ENEMYARRAYSIZE; i++)
+	{
+		if (enemyArray[i] != NULL) {
+			gameWindow->draw(enemyArray[i]->GetSprite());
+			enemyArray[i]->Movement();
+			enemyArray[i]->UpdateFrameRate();
+		}
+	}
+	for (int i = 0; i < ENEMYBULLETARRAYSIZE; i++)
+	{
+		if (enemyBulletArray[i] != NULL) {
+			gameWindow->draw(enemyBulletArray[i]->GetSprite());
+			enemyBulletArray[i]->Movement();
 		}
 	}
 	gameWindow->display();
