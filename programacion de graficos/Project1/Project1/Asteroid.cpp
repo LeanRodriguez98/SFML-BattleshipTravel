@@ -1,5 +1,4 @@
 #include "Asteroid.h"
-#include <iostream>
 Asteroid::Asteroid(float x_position, float y_position)
 {
 	asteroidTexture = new Texture();

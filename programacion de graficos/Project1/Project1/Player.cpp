@@ -1,7 +1,4 @@
 #include "Player.h"
-#include "Bullet.h"
-#include <iostream>
-using namespace std;
 Player::Player()
 {
 	playerTexture = new Texture();

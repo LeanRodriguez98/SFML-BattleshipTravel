@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAME_H
+#define GAME_H
 #include "SFML\Graphics.hpp"
 #include "SFML\Audio.hpp"
 #include "Player.h"
@@ -6,7 +7,6 @@
 #include "Asteroid.h"
 #include "Enemy.h"
 #include <time.h>
-#include <iterator>
 using namespace sf;
 using namespace std;
 #define FPSLIMIT 60
@@ -75,3 +75,4 @@ private:
 	int points;
 	bool gameLoop;
 };
+#endif

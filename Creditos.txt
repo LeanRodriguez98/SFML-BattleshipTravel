@@ -1,0 +1,10 @@
+Librerias graficas utilizadas:
+SFML-2.4.2
+Musica:
+https://www.youtube.com/watch?v=NEjS4W8iPI0
+Font:
+http://www.fontspace.com/category/video%20game
+Sonidos:
+Creados con bfxr https://www.bfxr.net/
+Sprites:
+Hechos por mi

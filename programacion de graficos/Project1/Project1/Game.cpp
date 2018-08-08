@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <iostream>
 Game::Game(Vector2i resolution, String title)
 {
 	srand(time(NULL));

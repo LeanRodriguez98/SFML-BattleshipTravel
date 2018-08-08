@@ -1,6 +1,5 @@
 #include "Enemy.h"
 #include "Bullet.h"
-#include <iostream>
 using namespace std;
 Enemy::Enemy(float x_position, float y_position)
 {

@@ -1,7 +1,7 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 #include "SFML\Graphics.hpp"
 using namespace sf;
-
 class Player
 {
 public:
@@ -17,3 +17,4 @@ private:
 	Vector2f* position;
 	float speed;
 };
+#endif

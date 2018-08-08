@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BULLET_H
+#define BULLET_H
 #include "SFML\Graphics.hpp"
 using namespace sf;
 class Bullet
@@ -16,4 +17,4 @@ private:
 	float speed;
 	bool ally;
 };
-
+#endif 

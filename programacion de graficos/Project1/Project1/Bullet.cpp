@@ -1,5 +1,4 @@
 #include "Bullet.h"
-#include <iostream>
 Bullet::Bullet(bool _ally, float x_position, float y_position) 
 {
 	bulletTexture = new Texture();
