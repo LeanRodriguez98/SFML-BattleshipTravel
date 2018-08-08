@@ -183,6 +183,31 @@ void Game::MenusInput()
 				gameWindow->close();
 			}
 			break;
+		case Event::JoystickButtonPressed:
+
+			if (actualScreen == MainMenuScreen)
+			{
+				actualScreen = GameScreen;
+			}
+			if (actualScreen == FinalScreen)
+			{
+				actualScreen = MainMenuScreen;
+				player = new Player();
+				points = 0;
+				DeleteEntitis();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::P))
+			{
+				if (actualScreen == PauseScreen)
+				{
+					actualScreen = GameScreen;
+				}
+			}
+			if (sf::Joystick::isButtonPressed(0, 7))
+			{
+				gameWindow->close();
+			}
 		}
 	}
 }
@@ -467,6 +492,8 @@ void Game::Input()
 {
 	while (gameWindow->pollEvent(*events))
 	{
+
+	
 		switch (events->type)
 		{
 		case Event::Closed:
@@ -475,7 +502,7 @@ void Game::Input()
 		case Event::KeyPressed:
 			if (player != NULL)
 			{
-				if (Keyboard::isKeyPressed(Keyboard::W) && player->GetPosition().y - player->GetSprite().getGlobalBounds().height > 0)
+				if ((Keyboard::isKeyPressed(Keyboard::W)) && player->GetPosition().y - player->GetSprite().getGlobalBounds().height > 0)
 				{
 					player->SetPosition(0, -1);
 				}
@@ -491,7 +518,7 @@ void Game::Input()
 				{
 					player->SetPosition(1, 0);
 				}
-				if (Keyboard::isKeyPressed(Keyboard::Space))
+				if (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0))
 				{
 					for (int i = 0; i < BULLETARRAYSIZE; i++)
 					{
@@ -511,7 +538,47 @@ void Game::Input()
 					actualScreen = PauseScreen;				
 				}
 			}
-			break;			
+			break;		
+		case Event::JoystickButtonPressed:
+
+			if (sf::Joystick::isButtonPressed(0, 0))
+			{
+				for (int i = 0; i < BULLETARRAYSIZE; i++)
+				{
+					if (bulletArray[i] == NULL) {
+						bulletArray[i] = new Bullet(true, player->GetPosition().x + player->GetSprite().getGlobalBounds().width, player->GetPosition().y + player->GetSprite().getGlobalBounds().height / 2 - BULLETSIZEY / 2);
+						break;
+					}
+				}
+				shootSound->play();
+			}
+			if (sf::Joystick::isButtonPressed(0, 6))
+			{
+				actualScreen = PauseScreen;
+			}
+			if (sf::Joystick::isButtonPressed(0, 7))
+			{
+				gameWindow->close();
+			}	
+
+		}
+
+		Vector2f moveSpeed(sf::Joystick::getAxisPosition(0, Joystick::X), sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+		if (moveSpeed.y < -70 && player->GetPosition().y - player->GetSprite().getGlobalBounds().height > 0)
+		{
+			player->SetPosition(0, -0.2);
+		}
+		if (moveSpeed.x < -70 && player->GetPosition().x - (player->GetSprite().getGlobalBounds().width / 4) > 0)
+		{
+			player->SetPosition(-0.2, 0);
+		}
+		if (moveSpeed.y > 70 && player->GetPosition().y + (player->GetSprite().getGlobalBounds().height * 1.5) < ScreenResolution->y)
+		{
+			player->SetPosition(0, 0.2);
+		}
+		if (moveSpeed.x  > 70 && player->GetPosition().x + (player->GetSprite().getGlobalBounds().width * 1.2) < ScreenResolution->x)
+		{
+			player->SetPosition(0.2, 0);
 		}
 	}
 } 
