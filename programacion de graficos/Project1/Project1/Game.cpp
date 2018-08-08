@@ -17,16 +17,43 @@ Game::Game(Vector2i resolution, String title)
 	enemyTime = new Time();
 	font = new Font();
 	textPoints = new Text();
+	titleText = new Text();
+	pressSpaceToStartText = new Text();
+	gameOverText = new Text();
+	pressSpaceToRestartText = new Text();
 	backgroundTexture = new Texture();
 	backgroundSprite = new Sprite();
+	actualScreen = MainMenuScreen;
 	backgroundTexture->loadFromFile("Background.png");
 	backgroundSprite->setTexture(*backgroundTexture);
 	font->loadFromFile("SpaceFont.ttf");
 	textPoints->setFont(*font);
 	textPoints->setPosition(50, 500);
 	textPoints->setCharacterSize(32);
-	textPoints->setString("points: " + to_string(points));
 	points = 0;
+	textPoints->setString("points: " + to_string(points));
+
+	titleText->setFont(*font);
+	titleText->setPosition(ScreenResolution->x / 8, ScreenResolution->y / 4);
+	titleText->setCharacterSize(50);
+	titleText->setString("BattleshipTravel!");
+	
+	pressSpaceToStartText->setFont(*font);
+	pressSpaceToStartText->setPosition(ScreenResolution->x / 8, (ScreenResolution->y /4)*3);
+	pressSpaceToStartText->setCharacterSize(40);
+	pressSpaceToStartText->setString("Press Space To Start");
+
+
+	gameOverText->setFont(*font);
+	gameOverText->setPosition(ScreenResolution->x / 6, ScreenResolution->y / 4);
+	gameOverText->setCharacterSize(80);
+	gameOverText->setString("GAME OVER");
+
+	pressSpaceToRestartText->setFont(*font);
+	pressSpaceToRestartText->setPosition(ScreenResolution->x / 8 - 10, (ScreenResolution->y / 4) * 3);
+	pressSpaceToRestartText->setCharacterSize(40);
+	pressSpaceToRestartText->setString("Press Space To Restart");
+
 	GameLoop();
 }
 
@@ -34,12 +61,72 @@ void Game::GameLoop()
 {
 	while (gameWindow->isOpen())
 	{
-		Input();
-		SpawnEnemys();
-		EnemyShoot();
-		SpawnAsteroids();
-		//Colisions();
-		Draw();
+		switch (actualScreen)
+		{
+		case MainMenuScreen:
+			MainMenuDraw();
+			MenusInput();
+			break;
+		case GameScreen:
+			Input();
+			SpawnEnemys();
+			EnemyShoot();
+			SpawnAsteroids();
+			Colisions();
+			Draw();
+			break;
+		case FinalScreen:
+			FinalScreenDraw();
+			MenusInput();
+			break;
+		}
+		
+	}
+}
+void Game::FinalScreenDraw() 
+{
+	gameWindow->clear(Color::Black);
+	gameWindow->draw(*backgroundSprite);
+	gameWindow->draw(*gameOverText);
+	gameWindow->draw(*pressSpaceToRestartText);
+	gameWindow->display();
+}
+
+void Game::MainMenuDraw() 
+{
+	gameWindow->clear(Color::Black);
+	gameWindow->draw(*backgroundSprite);
+	gameWindow->draw(*titleText);
+	gameWindow->draw(*pressSpaceToStartText);
+	gameWindow->display();
+}
+
+void Game::MenusInput() 
+{
+	while (gameWindow->pollEvent(*events))
+	{
+		switch (events->type)
+		{
+		case Event::Closed:
+			gameWindow->close();
+			break;
+		case Event::KeyPressed:
+			if (Keyboard::isKeyPressed(Keyboard::Space))
+			{
+				if (actualScreen == MainMenuScreen)
+				{
+					actualScreen = GameScreen;
+				}
+				if (actualScreen == FinalScreen)
+				{				
+					actualScreen = MainMenuScreen;
+					player = new Player();
+					points = 0;
+					DeleteEntitis();
+				}
+			}
+			break;
+		}
 	}
 }
 
@@ -170,6 +257,7 @@ void Game::Colisions()
 				delete player;
 				player = NULL;
 				enemyBulletArray[i] = NULL;
+				actualScreen = FinalScreen;
 				break;
 			}
 		}
@@ -184,6 +272,7 @@ void Game::Colisions()
 				delete player;
 				player = NULL;
 				enemyArray[i] = NULL;
+				actualScreen = FinalScreen;
 				break;
 			}
 		}
@@ -198,6 +287,7 @@ void Game::Colisions()
 				delete player;
 				player = NULL;
 				asteroidArray[i] = NULL;
+				actualScreen = FinalScreen;
 				break;
 			}
 		}
@@ -348,7 +438,42 @@ void Game::Input()
 		}
 	}
 } 
-
+void Game::DeleteEntitis()
+{
+	for (int i = 0; i < BULLETARRAYSIZE; i++)
+	{
+		if (bulletArray[i] != NULL)
+		{		
+		delete bulletArray[i];
+		bulletArray[i] = NULL;
+		}
+	}
+	for (int i = 0; i < ENEMYARRAYSIZE; i++)
+	{
+		if (enemyArray[i] != NULL)
+		{
+			delete enemyArray[i];
+			enemyArray[i] = NULL;
+		}
+	}
+	for (int i = 0; i < ENEMYBULLETARRAYSIZE; i++)
+	{
+		if (enemyBulletArray[i] != NULL)
+		{
+			delete enemyBulletArray[i];
+			enemyBulletArray[i] = NULL;
+		}
+	
+	}
+	for (int i = 0; i < ASTEROIDARRAYSIZE; i++)
+	{
+		if (asteroidArray[i] != NULL)
+		{
+			delete asteroidArray[i];
+			asteroidArray[i] = NULL;
+		}
+	}
+}
 Game::~Game()
 {
 	delete player;
@@ -364,26 +489,7 @@ Game::~Game()
 	delete enemyTime;
 	delete font;
 	delete textPoints;
-	for (int i = 0; i < BULLETARRAYSIZE; i++)
-	{
-		if (bulletArray[i] != NULL)
-			delete bulletArray[i];
-	}
-	for (int i = 0; i < ENEMYARRAYSIZE; i++)
-	{
-		if (enemyArray[i] != NULL)
-			delete enemyArray[i];
-	}
-	for (int i = 0; i < ENEMYBULLETARRAYSIZE; i++)
-	{
-		if (enemyBulletArray[i] != NULL)
-			delete enemyBulletArray[i];
-	}
-	for (int i = 0; i < ASTEROIDARRAYSIZE; i++)
-	{
-		if (asteroidArray[i] != NULL)
-			delete asteroidArray[i];
-	}
+	DeleteEntitis();
 	//La computadora da un error que dice: "no se encontro delete_array.cpp"
 
 	/*delete[] bulletArray;

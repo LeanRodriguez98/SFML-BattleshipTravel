@@ -31,7 +31,13 @@ public:
 	void SpawnEnemys();
 	void EnemyShoot();
 	void Colisions();
+	void MainMenuDraw();
+	void MenusInput();
+	void FinalScreenDraw();
+	void DeleteEntitis();
 private:
+	enum Screen{ MainMenuScreen, GameScreen, FinalScreen };
+	Screen actualScreen;
 	Player * player;
 	RenderWindow * gameWindow;
 	Event * events;	
@@ -48,6 +54,11 @@ private:
 	Time * enemyTime;
 	Font * font;
 	Text * textPoints;
+	Text * titleText;
+	Text * pressSpaceToStartText;
+	Text * gameOverText;
+	Text * pressSpaceToRestartText;
+
 	int maxFps;
 	int points;
 	bool gameLoop;
