@@ -23,6 +23,23 @@ Game::Game(Vector2i resolution, String title)
 	pressSpaceToRestartText = new Text();
 	backgroundTexture = new Texture();
 	backgroundSprite = new Sprite();
+	shootBuffer = new SoundBuffer();
+	shootSound = new Sound();
+
+	enemyShootBuffer = new SoundBuffer();
+	enemyShootSound = new Sound();
+
+	playerExplotionBuffer = new SoundBuffer();
+	playerExplotionSound = new Sound();
+
+	enemyExplotionBuffer = new SoundBuffer();
+	enemyExplotionSound = new Sound();
+
+	asteroidBuffer = new SoundBuffer();
+	asteroidSound = new Sound();
+
+
+	backgroundMusic = new Music();
 	actualScreen = MainMenuScreen;
 	backgroundTexture->loadFromFile("Background.png");
 	backgroundSprite->setTexture(*backgroundTexture);
@@ -54,6 +71,30 @@ Game::Game(Vector2i resolution, String title)
 	pressSpaceToRestartText->setCharacterSize(40);
 	pressSpaceToRestartText->setString("Press Space To Restart");
 
+	shootBuffer->loadFromFile("Shoot.wav");
+	shootSound->setBuffer(*shootBuffer);
+	shootSound->setVolume(10);
+
+	enemyShootBuffer->loadFromFile("Shoot2.wav");
+	enemyShootSound->setBuffer(*enemyShootBuffer);
+	enemyShootSound->setVolume(10);
+
+	playerExplotionBuffer->loadFromFile("Explosion.wav");
+	playerExplotionSound->setBuffer(*playerExplotionBuffer);
+	playerExplotionSound->setVolume(10);
+
+	enemyExplotionBuffer->loadFromFile("Explosion2.wav");
+	enemyExplotionSound->setBuffer(*enemyExplotionBuffer);
+	enemyExplotionSound->setVolume(10);
+
+	asteroidBuffer->loadFromFile("Asteroid.wav");
+	asteroidSound->setBuffer(*asteroidBuffer);
+	asteroidSound->setVolume(10);
+
+	backgroundMusic->openFromFile("BackgroundMusic.wav");
+	backgroundMusic->setVolume(5);
+	backgroundMusic->setLoop(true);
+	backgroundMusic->play();
 	GameLoop();
 }
 
@@ -162,6 +203,8 @@ void Game::Colisions()
 						enemyArray[i] = NULL;
 						bulletArray[j] = NULL;
 						points += 100;
+						enemyExplotionSound->play();
+
 						break;
 					}
 				}
@@ -203,6 +246,7 @@ void Game::Colisions()
 			{
 				delete enemyArray[i];
 				enemyArray[i] = NULL;
+
 			}
 		}
 	}
@@ -274,6 +318,8 @@ void Game::Colisions()
 				player = NULL;
 				enemyBulletArray[i] = NULL;
 				actualScreen = FinalScreen;
+				playerExplotionSound->play();
+
 				break;
 			}
 		}
@@ -289,6 +335,8 @@ void Game::Colisions()
 				player = NULL;
 				enemyArray[i] = NULL;
 				actualScreen = FinalScreen;
+				playerExplotionSound->play();
+				enemyExplotionSound->play();
 				break;
 			}
 		}
@@ -304,6 +352,7 @@ void Game::Colisions()
 				player = NULL;
 				asteroidArray[i] = NULL;
 				actualScreen = FinalScreen;
+				playerExplotionSound->play();
 				break;
 			}
 		}
@@ -320,8 +369,10 @@ void Game::EnemyShoot()
 			{
 				for (int j = 0; j < ENEMYBULLETARRAYSIZE; j++)
 				{
-					if (enemyBulletArray[j] == NULL) {
+					if (enemyBulletArray[j] == NULL)
+					{
 						enemyBulletArray[j] = new Bullet(false, enemyArray[i]->GetPosition().x, enemyArray[i]->GetPosition().y + enemyArray[i]->GetSprite().getGlobalBounds().height / 2 - BULLETSIZEY / 2);
+						enemyShootSound->play();					
 						break;
 					}
 				}
@@ -356,6 +407,7 @@ void Game::SpawnAsteroids()
 		{
 			if (asteroidArray[i] == NULL) {
 				asteroidArray[i] = new Asteroid(ScreenResolution->x,rand()%ScreenResolution->y-ASTEROIDSIZEY);
+				asteroidSound->play();
 				break;
 			}
 		}
@@ -448,6 +500,7 @@ void Game::Input()
 							break;
 						}
 					}
+					shootSound->play();
 				}
 				if (Keyboard::isKeyPressed(Keyboard::Escape))
 				{
@@ -503,7 +556,6 @@ Game::~Game()
 	delete player;
 	delete gameWindow;
 	delete events;
-
 	delete ScreenResolution;
 	delete backgroundTexture;
 	delete backgroundSprite;
@@ -517,6 +569,17 @@ Game::~Game()
 	delete pressSpaceToStartText;
 	delete gameOverText;
 	delete pressSpaceToRestartText;
+	delete shootBuffer;
+	delete shootSound;
+	delete backgroundMusic;
+	delete enemyShootBuffer;
+	delete enemyShootSound;
+	delete playerExplotionBuffer;
+	delete playerExplotionSound;
+	delete enemyExplotionBuffer;
+	delete enemyExplotionSound;
+	delete asteroidBuffer;
+	delete asteroidSound;
 	DeleteEntitis();
 	//La computadora da un error que dice: "no se encontro delete_array.cpp"
 

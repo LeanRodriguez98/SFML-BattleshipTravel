@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML\Graphics.hpp"
+#include "SFML\Audio.hpp"
 #include "Player.h"
 #include "Bullet.h"
 #include "Asteroid.h"
@@ -58,6 +59,17 @@ private:
 	Text * pressSpaceToStartText;
 	Text * gameOverText;
 	Text * pressSpaceToRestartText;
+	SoundBuffer * shootBuffer;
+	Sound * shootSound;
+	SoundBuffer * enemyShootBuffer;
+	Sound * enemyShootSound;
+	SoundBuffer * playerExplotionBuffer;
+	Sound * playerExplotionSound;
+	SoundBuffer * enemyExplotionBuffer;
+	Sound * enemyExplotionSound;
+	SoundBuffer * asteroidBuffer;
+	Sound * asteroidSound;
+	Music * backgroundMusic;
 
 	int maxFps;
 	int points;
